@@ -1,0 +1,247 @@
+" To use it, copy it to
+"   for Unix and OS/2:  ~/.gvimrc
+"   for MS-DOS and Win32:  $VIM\_gvimrc
+
+" Set the X11 font to use
+
+set fileencodings=ucs-bom,utf-8,latin1
+set termencoding=utf-8
+set guifont=Liberation\ Mono\ 9
+set lines=100 columns=79
+
+" read/write a .viminfo file, don't store more
+" than 50 lines of registers
+set viminfo='20,\"50	
+
+" keep 50 lines of command line history
+set history=50		
+
+" show the cursor position all the time		
+set ruler		
+
+" Make command-line two lines high
+set ch=2		
+
+" Hide the mouse when typing text
+" set mousehide	
+
+" Enable all modes
+" set mouse=a
+
+" Autoindent on
+set ai is
+
+" Allow use of backspace
+set bs=2
+
+" Set cindenting rules 
+set cindent
+"set cinkeys={,},:,0#,!^F,o,O,e
+"set cinoptions={.5s,:.5s,+.5s,t0,g0,^-2,e-2,n-2,p2s,(0,=.5s formatoptions=croql cindent shiftwidth=4 tabstop=8
+
+" Display short messages
+set shm=A
+
+" Customize tab setting
+set smarttab
+set softtabstop=3
+set tabstop=3
+set shiftwidth=3
+set expandtab
+set ffs=unix,dos
+set ff=unix
+" Wrapping disabled
+set nowrap 
+
+" No ~files created
+set nobackup 
+
+" Autowrite all
+set awa
+
+" Path of swap files
+"set dir=/home/danny/vimswp
+
+" Make shift-insert work like in Xterm
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+
+" Alternate setting for ESC
+" map! <S-CR> <ESC> 
+
+" Traverse the buffers
+map <S-tab> <ESC>:bn!<CR>
+map <S-BS> <ESC>:bp!<CR>
+
+" Copy-Cut-Paste windows-like 
+"map <C-c> y'c
+"map <C-v> d'v
+"map <C-x> d'x
+
+" Open new instance of gvim in same directory
+map <C-n> <ESC>:!gvim<CR><CR>
+
+" Quit 
+map <C-q> <ESC>:q<CR>
+
+" Get Vim prompt & tag prompt
+"map tt <ESC>:
+
+" Motions startofline & endofline / startoffile & endoffile
+"map s <ESC>0	   --> 0 start of line,^ first non-blank char
+"map e <ESC>$	   --> $
+"map S <ESC>:0<CR> --> gg
+"map E <ESC>:$<CR> --> G
+
+" Change directory to the path under cursor
+map gc :execute("cd ".expand("<cfile>:h"))<CR>:pwd<CR>
+
+" Highlighting strings inside C comments
+let c_comment_strings=1
+filetype on
+
+" Default highlighting
+hi clear Normal
+set hls
+set bg&
+
+" Highlight tags 
+hi Tag	 ctermfg=DarkCyan     guifg=DarkCyan   
+
+" Highlight Brackets
+" map gb <ESC>:call ShowPairs()<CR>
+
+" Switch on syntax highlighting if it wasn't on yet.
+if !exists("syntax_on")
+   syntax on
+endif
+
+colorscheme default
+" Toggle highlight search (folke)
+noremap <F11> :if 1 == &hls \| noh \| else \| set hls \| endif \| <CR>
+
+" Find in files
+map gr <ESC>:grep -irH --exclude=tags --exclude=build/ --exclude=*.o --include=*.c --include=*.h 
+
+" Open the list window
+noremap fg :copen<CR>
+
+" Close the list window
+noremap fd :cclose<CR>
+
+" Goto next found
+noremap fn :cn!<CR> 
+
+" Goto previous found
+noremap fp :cp!<CR>
+
+map ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+
+" Delete current buffer
+noremap <F4> :bd!<CR>
+
+" Save file
+map <C-s> <ESC>:w!<CR>
+map <C-d> <ESC>:tn<CR>
+map <C-a> <ESC>:ts<CR>
+map <C-x> <ESC>:make<CR>
+map <C-e> <ESC>:e#<CR>
+map <C-l> :set list!<CR>:echo "list mode" &list ? "on" : "off"<CR>
+
+" Generate ctags
+noremap <F8> :!/usr/bin/ctags -R --links=no --extra=+f --asm-kinds=+ .
+
+" Taglist Explorer
+let TE_Ctags_Cmd = '/usr/bin/ctags'
+let TE_Use_Right_Window = 0
+
+" Open tag explorer
+noremap te :TagExplorer<CR><C-w>h
+
+" Taglist plugin
+let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+let Tlist_Show_One_File = 1
+let Tlist_Use_Right_Window = 0
+
+" Open tag explorer
+" noremap <S-F8> :Tlist<CR><C-w>h 
+noremap tl :Tlist<CR><C-w>h 
+
+" Generate tags.vim file out of tags file for highlighting all local functions
+noremap tc :sp tags<CR>:%s/^\([^ \t:]*:\)\=\([^ \t]*\).*/syntax keyword Tag \2/<CR>:wq! tags.vim<CR>/^<CR><F5><F10>
+
+" Source tags.vim file
+noremap ts :source tags.vim<CR>
+
+" Start explorer
+noremap E :e.<CR> 
+
+" Reload the buffer
+noremap F5 :e%<CR> 
+
+" Find and replace
+map <C-h> <ESC>:promptrepl<CR>
+
+" Commenting a block of code
+map <C-c> <ESC>:'<,'>call PComment()<CR>
+
+" Commenting a line of code
+let g:EnhCommentifyUseAltKeys = 'Yes'
+let g:EnhCommentifyTraditionalMode = 'Yes'
+map <C-l> <ESC>:'<,'>call EnhancedCommentify('', 'guess')<CR>j
+
+vmap \s y/\V<C-R>=substitute(escape(@",'/'),"\n","\\\\n","g")<CR>/<CR>
+
+" Cscope
+" if has("cscope")
+"	set csprg=/usr/local/bin/cscope
+"	set csto=0
+"	set cst
+"	set nocsverb
+"	" add any database in current directory
+"	if filereadable("cscope.out")
+"		cs add cscope.out
+"	" else add database pointed to by environment
+"	elseif $CSCOPE_DB != ""
+"		cs add $CSCOPE_DB
+"	endif
+"	set csverb
+"endif
+
+"func FIND_IN_CSCOPE(arg)
+"	let a=expand("")
+"	if (a:arg == "s")
+"		exe "normal :cscope find s"a"^M"
+"	elseif (a:arg == "g")
+"		exe "normal :cscope find g"a"^M"
+"	elseif (a:arg == "c")
+"		exe "normal :cscope find c"a"^M"
+"	elseif (a:arg == "f")
+"		exe "normal :cscope find f"a"^M"
+"	elseif (a:arg == "e")
+"		exe "normal :cscope find e"a"^M"
+"	elseif (a:arg == "i")
+"		exe "normal :cscope find i"a"^M"
+"	endif
+"endfunction
+
+"Find function calling this function
+"map fc :cscope find c 
+
+"Find symbol
+"map fs :cscope find s 
+
+"Find definition
+"map fg :cscope find g 
+
+"Find file
+"map ff :cscope find f 
+
+"Find egrep pattern
+"map fe :cscope find e 
+
+"Find file #including this file
+"map fi :cscope find i 
+
+"cd /home/jb
+    map  <F7>   <Plug>ShowFunc
